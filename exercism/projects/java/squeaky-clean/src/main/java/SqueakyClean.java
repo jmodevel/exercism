@@ -2,6 +2,10 @@ class SqueakyClean {
     private static final int ALPHA = 0x000003B1;
     private static final int OMEGA = 0x000003C9;
 
+    private SqueakyClean() {
+        throw new IllegalStateException("Utility class");
+    }
+
     static String clean(String identifier) {
         StringBuilder sb = new StringBuilder();
         boolean camel = false;
