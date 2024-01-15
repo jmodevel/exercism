@@ -1,5 +1,3 @@
-import java.util.stream.IntStream;
-
 class ReverseString {
 
     String reverse(String inputString) {
