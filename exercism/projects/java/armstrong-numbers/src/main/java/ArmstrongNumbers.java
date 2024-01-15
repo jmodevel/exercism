@@ -1,5 +1,3 @@
-import java.util.concurrent.atomic.AtomicInteger;
-
 class ArmstrongNumbers {
 
     boolean isArmstrongNumber(int numberToCheck) {
