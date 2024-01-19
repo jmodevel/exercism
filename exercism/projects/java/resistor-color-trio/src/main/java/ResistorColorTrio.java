@@ -21,29 +21,43 @@ class ResistorColorTrio {
 
     }
 
-    private static final String SUFFIX        = "ohms";
-    private static final int    COLORS_IN_DUO = 3;
+    private static final String SUFFIX         = "ohms";
+    private static final int    DECIMAL_BASE   = 10;
 
     String label(String[] colors) {
 
-        int first = fromColor( colors[0] );
-        int last  = fromColor( colors[1] );
-        int exp   = fromColor( colors[2] );
+        int first    = fromColor( colors[0] );
+        int last     = fromColor( colors[1] );
+        int exponent = fromColor( colors[2] );
 
-        int exponent = ( last == 0 )? exp+1 : exp;
+        int value  = first * DECIMAL_BASE + last;
 
-        MetricPrefix closest = Arrays.stream( MetricPrefix.values() )
-                .filter( p -> p.factor <= exponent )
-                .findFirst().orElse( MetricPrefix.NONE );
+        if( value == 0 ){
+            return String.join( " ", "0", SUFFIX );
+        }
+        int trailingZeros = exponent;
+        if( last == 0 ){
+            trailingZeros = exponent+1;
+            value         = first;
+        }
+        MetricPrefix closest = getClosestMetricPrefix( trailingZeros );
 
-        String prefix = ( closest == MetricPrefix.NONE )? "" : closest.name().toLowerCase();
+        if( closest == MetricPrefix.NONE ){
+            value *= (int) Math.pow( DECIMAL_BASE, trailingZeros );
+            return String.join( " ", String.valueOf( value ), SUFFIX );
+        }
 
-        int pow    = exponent % (( closest == MetricPrefix.NONE )? COLORS_IN_DUO : closest.factor );
-        int factor = ( last == 0 )? 1 : 10;
-        int value  = ( first * factor + last ) * (int) Math.pow( 10, pow );
+        int pow = trailingZeros % closest.factor;
+        value *= (int) Math.pow( DECIMAL_BASE, pow );
 
-        return String.format( "%d %s%s", value, prefix, SUFFIX );
+        return String.format( "%d %s%s", value, closest.name().toLowerCase(), SUFFIX );
 
+    }
+
+    private static MetricPrefix getClosestMetricPrefix(int trailingZeros) {
+        return Arrays.stream( MetricPrefix.values() )
+                .filter( p -> p.factor <= trailingZeros )
+                .findFirst().orElse(MetricPrefix.NONE);
     }
 
     private int fromColor( String color ){
