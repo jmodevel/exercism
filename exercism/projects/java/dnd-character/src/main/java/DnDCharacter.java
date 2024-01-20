@@ -1,6 +1,6 @@
+import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.IntStream;
 
 class DnDCharacter {
@@ -20,7 +20,7 @@ class DnDCharacter {
     private final int wisdom;
     private final int charisma;
 
-    private Random dice = new Random();
+    private SecureRandom dice = new SecureRandom();
 
     public DnDCharacter(){
         this.strength     = ability( rollDice() );
