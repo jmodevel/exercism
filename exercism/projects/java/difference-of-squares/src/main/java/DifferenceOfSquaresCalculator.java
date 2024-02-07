@@ -1,7 +1,7 @@
 class DifferenceOfSquaresCalculator {
 
     int computeSquareOfSumTo(int input) {
-        return (int) Math.pow( input*(input+1)/2, 2);
+        return (int) Math.pow( (double) (input * (input + 1)) /2, 2);
     }
 
     int computeSumOfSquaresTo(int input) {
